@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from github import Github
-import argparse, sys
+import argparse, sys, re
 gh = Github()
 gf = False
 
@@ -29,6 +29,7 @@ def search(args):
         global gf
         gf = True
     query = arg.gf + arg.query + language
+    print('help-wanted-issues:>1 '+ query)
     if not query:
         args.print_help(sys.stderr)
         exit()
@@ -36,16 +37,22 @@ def search(args):
 
 
 def get_issue(repolist):
+    good = ''
+    repoq = []
+    if gf:
+        good = 'label:"good first issue"'
     for repo in repolist:
-        good = ''
-        if gf:
-            good = 'label:"good first issue"'
-        query = 'repo:' + repo.full_name + ' is:open label:"help wanted" ' + good
-        issue_list = gh.search_issues(query=query)
+        repoq.append('repo:' + repo.full_name)
+    repoq = re.sub(r'\[|\]|,|\'', '', str(repoq))
+    print(repoq)
+    query = repoq + ' is:open label:"help wanted" ' + good
+    print(query)
+    issue_list = gh.search_issues(query=query)
     return issue_list
 
 
-issues = get_issue(search(main()))
+args = main()
+issues = get_issue(search(args))
 for issue in issues:
     print(issue.repository.full_name)
     print(issue.repository.html_url)
