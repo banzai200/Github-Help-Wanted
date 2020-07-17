@@ -1,6 +1,9 @@
 #!/usr/bin/python
+import argparse
+import re
+import sys
 from github import Github
-import argparse, sys, re
+
 gh = Github()
 gf = False
 
@@ -48,12 +51,13 @@ def get_issue(repolist):
     return issue_list
 
 
-args = main()
-issues = get_issue(search(args))
-for issue in issues:
-    print(issue.repository.full_name)
-    print(issue.repository.html_url)
-    print(issue.title)
-    print(issue.html_url)
-    print(issue.body)
-    print('\n')
+def exe():
+    args = main()
+    issues = get_issue(search(args))
+    for issue in issues:
+        print(issue.repository.full_name)
+        print(issue.repository.html_url)
+        print(issue.title)
+        print(issue.html_url)
+        print(issue.body)
+        print('\n')
