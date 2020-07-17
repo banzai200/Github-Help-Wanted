@@ -8,7 +8,7 @@ gh = Github()
 gf = False
 
 
-def main():
+def exe():
     parse = argparse.ArgumentParser(description="Search issues within repos on Github")
     parse.add_argument(action='store', dest='query', nargs='?', const=1, default='')
     parse.add_argument("-gf", help="Search good-first-issue", action="store_const",
@@ -51,8 +51,8 @@ def get_issue(repolist):
     return issue_list
 
 
-def exe():
-    args = main()
+def main():
+    args = exe()
     issues = get_issue(search(args))
     for issue in issues:
         print(issue.repository.full_name)
