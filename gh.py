@@ -29,7 +29,6 @@ def search(args):
         global gf
         gf = True
     query = arg.gf + arg.query + language
-    print('help-wanted-issues:>1 '+ query)
     if not query:
         args.print_help(sys.stderr)
         exit()
@@ -44,9 +43,7 @@ def get_issue(repolist):
     for repo in repolist:
         repoq.append('repo:' + repo.full_name)
     repoq = re.sub(r'\[|\]|,|\'', '', str(repoq))
-    print(repoq)
     query = repoq + ' is:open label:"help wanted" ' + good
-    print(query)
     issue_list = gh.search_issues(query=query)
     return issue_list
 
