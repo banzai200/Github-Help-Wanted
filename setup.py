@@ -7,7 +7,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='github-help-wanted',
-    version='1.0.1',
+    version='1.1',
     packages=['githubhelp'],
     url='https://github.com/banzai200/Github-Help-Wanted',
     license='MIT License',
