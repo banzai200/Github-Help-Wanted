@@ -194,3 +194,7 @@ cython_debug/
     Blog
     About
 
+
+.scannerwork/
+
+sonar-project.properties

@@ -4,9 +4,8 @@ import re
 import sys
 from github import Github
 
-gh = Github()
 gf = False
-
+gh = Github()
 
 def exe():
     parse = argparse.ArgumentParser(description="Search issues within repos on Github")
@@ -19,13 +18,27 @@ def exe():
                        dest='language', nargs='?', const=1, default='')
     parse.add_argument("-d", help="Order by descendant", action="store_const",
                        const='desc', default='asc')
+    parse.add_argument("--login", help="Search using login and password",
+                       action="store", dest='login', nargs='+')
+    parse.add_argument("--token", help="Search using token",
+                       action="store", dest='token')
+    parse.add_argument("-c", "--count", help="Limit number of repositories",
+                       action="store", dest="number", type=int, default=60)
 
     return parse
 
 
 def search(args):
     arg = args.parse_args()
+    pages = (arg.number / 30) + (arg.number % 30 > 0)
     language = ''
+    pagenum = 1
+    repos = []
+    global gh
+    if arg.login:
+        gh = Github(arg.login[0], arg.login[1])
+    elif arg.token:
+        gh = Github(arg.token)
     if arg.language:
         language = ' language:' + arg.language
     if arg.gf:
@@ -35,7 +48,12 @@ def search(args):
     if not query:
         args.print_help(sys.stderr)
         exit()
-    return gh.search_repositories(query='help-wanted-issues:>1 ' + query, sort=arg.sort, order=arg.d)
+    while pagenum <= int(pages):
+        for repo in gh.search_repositories(query='help-wanted-issues:>1 ' + query, sort=arg.sort, order=arg.d).get_page(pagenum):
+            repos.append(repo)
+        pagenum = pagenum + 1
+    print(repos[:arg.number])
+    return repos[:arg.number]
 
 
 def get_issue(repolist):
@@ -61,3 +79,5 @@ def main():
         print(issue.html_url)
         print(issue.body)
         print('\n')
+
+main()

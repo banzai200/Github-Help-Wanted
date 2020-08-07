@@ -9,9 +9,8 @@ pip install github-help-wanted
 
 ## Usage
 ```
-gh [-h] [-gf] [-s [SORT]] [-l [LANGUAGE]] [-d] [query]
+gh [-h] [-gf] [-s [SORT]] [-l [LANGUAGE]] [-d] [--login username password] [--token TOKEN] [-c NUMBER] [query]
 ```
-
 ### Search issues with the 'good-first' tag
 ```
 gh repo -gf
@@ -19,6 +18,14 @@ gh repo -gf
 ### Search by programming language
 ```
 gh -l piglatin
+```
+### Search using github authentication
+```
+gh -l python -login login@github.com supersecretpassword
+```
+### Limit search to 20 repositories
+```
+gh repo -c 20
 ```
 
 Response will be printed to stdout on the following format:
@@ -58,12 +65,10 @@ Suggested by @rhonorv on [RC Zulip :lock:](https://recurse.zulipchat.com/#narrow
 ```
 ## Limitations
 
-Since it uses the Github Search API, it has a rate limitation on multipage searches, being limited to [60 searches per hour](https://developer.github.com/v3/#rate-limiting)
+Since it uses the Github Search API, it has a rate limitation on multipage searches, being limited to 60 searches per hour on unauthenticated uses, see more in https://developer.github.com/v3/#rate-limiting
 
-On the more ambiguous terms of search, for example, searching all the Python issues without a query, the program crashes with an exception, blowing the limitation, since PyGithub searches everytime there's a page on the search results
+On the more ambiguous terms of search, for example, searching all the Python issues without a query, the program crashes with an exception, blowing the limitation, since PyGithub searches everytime there's a page on the search results, in these cases
 
 ## TODO
 
-- Limit results for the search API
-- Implement a Auth option for queries
 - Make a better usage guide
