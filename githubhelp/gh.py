@@ -8,6 +8,19 @@ gf = False
 gh = Github()
 
 def exe():
+    '''
+    Command-line Arguments:
+        -gf: Search good-first-issue.
+        -s: Sort [forks, stars]. Pass one of the strings: 'stars', 'forks, 'updated'
+        -l: Search by programming language. Pass a string of which language you want to search
+        -d: Order by descendant. Default set to 'asc'. You can also pass 'desc'
+        --login: Search using login and password. Pass the account and its password to login to Github
+        --token: Search using token. Pass the token of a Github account to login to Github
+        -c, --count: Limit number of repositories. Pass an integer which limits the number of results shown
+
+    Returns:
+        ArgumentParser Object: hold all the information necessary to parse the command line
+    '''    
     parse = argparse.ArgumentParser(description="Search issues within repos on Github")
     parse.add_argument(action='store', dest='query', nargs='?', const=1, default='')
     parse.add_argument("-gf", help="Search good-first-issue", action="store_const",
@@ -29,6 +42,15 @@ def exe():
 
 
 def search(args):
+    '''
+    Use the args parsed by fuction exe() to search repositories which have `help-wanted` issues
+
+    Args:
+        args (ArgumentParser Object): hold all the information necessary to parse the command line
+
+    Returns:
+        list of repository object: repo_list
+    '''
     arg = args.parse_args()
     pages = (arg.number / 30) + (arg.number % 30 > 0)
     language = ''
@@ -57,6 +79,15 @@ def search(args):
 
 
 def get_issue(repolist):
+    '''
+    Get issues by args
+
+    Args:
+        repolist (list of repository object): repo_list
+
+    Returns:
+        list of issue object: issue_list
+    '''
     good = ''
     repoq = []
     if gf:
